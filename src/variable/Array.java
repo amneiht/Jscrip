@@ -14,7 +14,7 @@ public class Array implements Var{
 		return "Array";
 	}
 
-	@Override
+	
 	public String getName() {
 		// TODO Auto-generated method stub
 		return null;

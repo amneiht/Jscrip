@@ -14,7 +14,6 @@ public class Bool  implements Var{
 		return "bool";
 	}
 
-	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
 		return null;
