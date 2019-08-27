@@ -1,17 +1,21 @@
-package extract;
+package ex2;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import extract.lib.Klist;
+
+// co the tang toc voi hashmap
 public class Kword {
 	protected List<String> key = new ArrayList<String>(10);
 	protected List<Integer> pri = new ArrayList<Integer>(10);
 	protected String[]list;
 	protected int[]plist;
+	
 	private boolean cv = true;
 	public Kword() {
-		pri.add(0);
-		pri.add(1000);
+		pri.add(Integer.MIN_VALUE);
+		pri.add(Integer.MAX_VALUE);
 		key.add("    ");// chot dau
 		key.add("~~~~");// chot cuoi
 	}
@@ -57,8 +61,8 @@ public class Kword {
 		}
 		return mid;
 	}
-	protected int findl(String a)
-	{
+	protected int findl(String a) // chuyen doi
+	{ 
 		int d = 0, cuoi = list.length - 1;
 		int mid, cmp;
 		mid = 0;
@@ -74,6 +78,6 @@ public class Kword {
 				cuoi = mid;
 			}
 		}
-		return mid;
+		return Klist.J_text;
 	}
 }

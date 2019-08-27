@@ -1,5 +1,5 @@
 
-package extract;
+package W_false;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -7,8 +7,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,13 +20,15 @@ public class Read {
 	static int ch = 0;// doc truoc 1 ky tu
 	static int point = 0;
 	static int[] key = new int[30];
-
+	static Stack<String> sta = new Stack<String>();
+	static Queue<String> que = new Queue<String>();
+	static final int len=1000;
 	static void init() {
 		String s = new File("").getAbsolutePath() + "/ope.txt";
 		List<String> h = getText(s);
 		for (String sd : h) {
 			String[] d = sd.split(":");
-			ope.add(d[0], Integer.parseInt(d[1]));
+			ope.add(d[0], Integer.parseInt(d[1])+len);
 		}
 		s = new File("").getAbsolutePath() + "/code.txt";
 		h = getText(s);
@@ -37,14 +39,14 @@ public class Read {
 		}
 	}
 
-	// private List<String> balantext(InputStream in)
-	// {
-	// char d=
-	// }
+	protected void balantext(InputStream in) {
+		
+	}
+
 	static boolean bget;
 
-	private static String get(DataInputStream in) throws IOException {
-		while (ch > 20) // loai cac ky tu thua
+	protected static String get(InputStream in) throws IOException {
+		while (ch <= ' ') // loai cac ky tu thua
 		{
 			ch = in.read();
 		}
@@ -62,7 +64,7 @@ public class Read {
 		return new String(key, 0, point);
 	}
 
-	private String getString(DataInputStream in) throws IOException {
+	static protected String getString(DataInputStream in) throws IOException {
 		StringBuilder st = new StringBuilder();
 		ch = in.read();
 		while (ch != '"') {

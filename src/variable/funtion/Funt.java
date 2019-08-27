@@ -3,12 +3,28 @@ package variable.funtion;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Funt extends Method{
+import variable.funtion.exec.Exe;
 
-	List<Method> md=new LinkedList<Method>();
+public class Funt extends Method {
+
+	List<Exe> md = new LinkedList<Exe>();
+
 	public void run() {
-		// TODO Auto-generated method stub
-		
+		// Exe cmn=new Funt();
+		int l = md.size();
+		while (point < l) {
+			md.get(point).run();
+			point++;
+		}
 	}
+
+	public void setpoint(int a) {
+		point = a;
+	}
+
+	public int getpoint() {
+		return point;
+	}
+	
 
 }
