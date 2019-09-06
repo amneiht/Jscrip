@@ -20,14 +20,107 @@ public class Read {
 	static InputStream in;
 	protected static Stack<String> text = new Stack<String>();
 	static Queue<String> que = new Queue<String>();
+	static int line = 0;
+	static int token = 0;
 
 	static void init(InputStream tin) {
 		in = tin;
 	}
 
-	private void code(String t) {
-		// khai bao mang de cmn sau
+	/**
+	 * kiem tra cu phap cua bieu thuc
+	 */
+	protected static void check_m() {
+		// a = b + c + d .....
+		try {
+			token = Ope.gettoken();
+			if (token != Klist.O_1bang) {
+				System.out.println("loi o dong thu " + line);
+				while (ch != '\n' || ch != ';') // doc het dong lenh
+					ch = get();
+				return;
 
+			}
+			Queue<Integer> p = new Queue<Integer>();
+			Stack<Integer> st = new Stack<Integer>();
+			token = Ope.gettoken();
+			p.push(token);
+			int d = token;
+			while (true) {
+				token = Ope.gettoken();
+				if ((ismath(token) && isope(d))) {
+					d = token;
+					p.push(d);
+
+				} else if ((ismath(d) && isope(token))) {
+					d = token;
+					if (d != Klist.O_dtron) {
+						if (st.isempty())
+							st.push(d);
+						else {
+							int z = st.show();
+							if (z > d) // toan tu co do uu tien cao hon trong ngan xep
+							{
+								z = st.pop();
+								p.push(z);
+								st.push(d);// duan vao ngan xep
+							}
+						}
+					} else {
+						int x = st.pop();
+						int f = 1;
+						while ((!st.isempty())) {
+							if (x != Klist.O_mtron) {
+								p.push(x);
+							} else {
+								f = 0;
+								break;
+							}
+							x = st.pop();
+						}
+						if (f != 0) {
+							System.out.println("loi o dong thu " + line);
+							while (ch != '\n' || ch != ';') // doc het dong lenh
+								ch = get();
+							return;
+
+						}
+
+					}
+				} else
+					break;
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * kiem tra a co phai la toan tu hay khong
+	 * 
+	 * @param a
+	 * @return
+	 */
+	private static boolean isope(int a) {
+		return a >= Klist.mod;
+	}
+
+	/**
+	 * kiem tra a co la toan hang hay khong
+	 * 
+	 * @param a
+	 * @return
+	 */
+	private static boolean ismath(int a) {
+		// se con cap nhat
+
+		if (a == Klist.J_text)
+			return true;
+		if (a == Klist.J_m)
+			return true;
+		return false;
 	}
 
 	protected static String getword(InputStream in) throws IOException {
@@ -53,9 +146,7 @@ public class Read {
 			}
 			if (ch == '"') {
 				String t;
-
 				t = getString(in);
-
 				que.push(t);
 				return Klist.J_text;
 			} else {
@@ -78,7 +169,7 @@ public class Read {
 		}
 	}
 
-	static int binarySearch(String x) {
+	static int binarySearch(String x) {// copy tren mang
 		int l = 0, r = Klist.list.length - 1;
 		while (l <= r) {
 			int m = l + (r - l) / 2;
@@ -136,7 +227,10 @@ public class Read {
 	}
 
 	public static int get() throws IOException {
-		return in.read();
+		int p = in.read();
+		if (p == '\n')
+			line++;
+		return p;
 	}
 
 	public static boolean ischar(int a) {

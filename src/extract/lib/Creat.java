@@ -10,18 +10,39 @@ import ex2.Read;
 public class Creat {
 	static String str; // "package extract.lib;\n";
 	static int mod = 1000;
-	static String ss = "/home/amneiht/app/code/workspace/jslib/src/";
 	static FileWriter fw;
-
+	static boolean show=false;
 	public static void main(String[] args) {
 		String ds = new Creat().getClass().getPackage().getName();
 		str = "package " + ds + ";";
 		try {
-			code();
-			//get();
+			 code();
+			// get();
+			//cmp();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void cmp() throws Exception {
+		fw = new FileWriter("/home/amneiht/app/code/workspace/jslib/src/ex2/T_cmp.java");// tao file so sanh
+		println("package ex2; \n");
+		println("import extract.lib.* ;");
+		println("class T_cmp {");
+		println("\tprotected static void code() {");
+		println("\tswitch(Read.token) {");
+		for (String s : Klist.list) {
+			println("\t\tcase Klist.J_" + s + " :");
+			println("\t\t\t//Read.check_" + s + "() ;");
+			println("\t\t\tbreak ;");
+		}
+		println("\t\tcase Klist.J_m :");
+		println("\t\t\t//Read.check_m() ;");
+		println("\t\t\tbreak ;");
+		println("\t\t}");
+		println("\t}");
+		println("}");
+		fw.close();
 	}
 
 	public static void code() throws Exception {
@@ -54,7 +75,7 @@ public class Creat {
 		for (String sd : h) {
 			// keyword.add(sd, i);
 			String[] ps = sd.split(":");
-			print("\tpublic static final int O_" + ps[2] + " = " + (Integer.parseInt(ps[1]) * 1000 + i) + " ;\n");
+			print("\tpublic static final int O_" + ps[2] + " = " + ((1+Integer.parseInt(ps[1])) * 1000 + i) + " ;\n");
 			i++;
 		}
 		st.append("} ;");
@@ -70,12 +91,11 @@ public class Creat {
 		fw = new FileWriter("/home/amneiht/app/code/workspace/jslib/src/ex2/Ope.java");
 		String s = new File("").getAbsolutePath() + "/ope.txt";
 		List<String> h = Read.getText(s);
-		// System.out.println("switch (ch) \n {");
 		println("package ex2; ");
-		println("import java.io.* ;");
 		println("import extract.lib.*;");
 		println("class Ope { ");
-		println("public static int gettoken() throws IOException {");
+		println("public static int gettoken() {");
+		println("try {");
 		Tree ps = new Tree();
 		for (String p : h) {
 			String[] sh = p.split(":");
@@ -83,30 +103,27 @@ public class Creat {
 		}
 		ps.write();
 		println("else return Read.kget(); ");
-//		Tree pk = new Tree();
-//		s = new File("").getAbsolutePath() + "/code.txt";
-//		h = Read.getText(s);
-//		for (String p : h) {
-//			pk.add(p, "J_" + p, 0);
-//		}
-//		pk.write();
-		
-	//	println("return Klist.J_text ;");
+		println("}catch(Exception e) \n { \n e.printStackTrace(); ");
+		println("	return Klist.J_false; ");
+		println("}");
 		println("}");
 		println("}");
 		fw.close();
 	}
 
 	static void println(String s) throws Exception {
-		fw.write(s + "\n");
+		if(!show)fw.write(s + "\n");
+		else System.out.println(s);
 	}
 
 	static void println() throws Exception {
-		fw.write("\n");
+		if(!show)fw.write("\n");
+		else System.out.println();
 	}
 
 	static void print(String s) throws Exception {
-		fw.write(s);
+		if(!show)fw.write(s);
+		else System.out.print(s);
 	}
 }
 //

@@ -3,8 +3,8 @@ package ex2;
 import java.util.LinkedList;
 
 public class Stack<E> {
-	public LinkedList<E> st = new LinkedList<E>();
-	
+	private LinkedList<E> st = new LinkedList<E>();
+
 	public void push(E d) {
 		st.add(d);
 	}
@@ -13,5 +13,13 @@ public class Stack<E> {
 		if (st.isEmpty())
 			return null;
 		return st.removeLast();
+	}
+
+	public boolean isempty() {
+		return st.isEmpty();
+	}
+
+	public E show() {
+		return st.getLast();
 	}
 }
