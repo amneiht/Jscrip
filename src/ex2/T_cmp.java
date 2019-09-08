@@ -2,7 +2,7 @@ package ex2;
 
 import extract.lib.* ;
 class T_cmp {
-	protected static void code() {
+	protected static void code(){
 	switch(Read.token) {
 		case Klist.J_String :
 			//Read.check_String() ;

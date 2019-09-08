@@ -25,76 +25,135 @@ public class Read {
 
 	static void init(InputStream tin) {
 		in = tin;
+		try {
+			ch = in.read();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * kiem tra cu phap cua bieu thuc
 	 */
 	protected static void check_m() {
-		// a = b + c + d .....
 		try {
 			token = Ope.gettoken();
 			if (token != Klist.O_1bang) {
-				System.out.println("loi o dong thu " + line);
-				while (ch != '\n' || ch != ';') // doc het dong lenh
-					ch = get();
+				System.out.println("loi thieu dau = o dong thu " + line);
+				endcode();
 				return;
 
 			}
-			Queue<Integer> p = new Queue<Integer>();
+			int d; // luu vet
+			Queue<Integer> q = new Queue<Integer>();
 			Stack<Integer> st = new Stack<Integer>();
 			token = Ope.gettoken();
-			p.push(token);
-			int d = token;
+			if (ismath(token))
+				q.push(token);
+			else
+				st.push(token);
 			while (true) {
+				d = token;
 				token = Ope.gettoken();
-				if ((ismath(token) && isope(d))) {
-					d = token;
-					p.push(d);
+				CheckL.cl(token);
+				if (token == Klist.O_het)
+					break;
+				if (isope(d) && ismath(token)) {// dat toan hang vao stack
+					q.push(token);
+				} else if (token == Klist.O_mtron) {
+					if (isope(d)) {
+						st.push(token);
+					} else {
+						// loai th a(sO
+						System.out.println("loi cu phap o dong thu " + line);
+						endcode();
+						return;
+					}
+				} else if (token == Klist.O_dtron) {
+					int x;
+					int f = 1;
+					// System.out.println();
+					while (!st.isempty()) {
 
-				} else if ((ismath(d) && isope(token))) {
-					d = token;
-					if (d != Klist.O_dtron) {
-						if (st.isempty())
-							st.push(d);
-						else {
+						x = st.pop();
+						if (x != Klist.O_mtron) {
+							q.push(x);
+						} else {
+							f = 0;
+							break;
+						}
+					}
+					if (f == 1) {
+						System.out.println("loi thieu ngoac o dong thu " + line);
+						endcode();// ket thuc cau lenh
+						return;
+					}
+				} else if (isope(token)) {
+					if (d == Klist.O_dtron || ismath(d)) {
+						if (st.isempty()) {
+							st.push(token);
+						} else {
 							int z = st.show();
-							if (z > d) // toan tu co do uu tien cao hon trong ngan xep
-							{
-								z = st.pop();
-								p.push(z);
-								st.push(d);// duan vao ngan xep
+
+							if ((z != Klist.O_mtron) && (getmod(z) <= getmod(token))) {
+								st.pop();// lay z
+								st.push(token);
+								q.push(z);
+
+							} else {
+
+								st.push(token);
 							}
 						}
 					} else {
-						int x = st.pop();
-						int f = 1;
-						while ((!st.isempty())) {
-							if (x != Klist.O_mtron) {
-								p.push(x);
-							} else {
-								f = 0;
-								break;
-							}
-							x = st.pop();
-						}
-						if (f != 0) {
-							System.out.println("loi o dong thu " + line);
-							while (ch != '\n' || ch != ';') // doc het dong lenh
-								ch = get();
-							return;
-
-						}
-
+						System.out.println("loi cu phap o dong thu " + line);
+						endcode();// ket thuc cau lenh
+						return;
 					}
-				} else
-					break;
-
+				} else {
+					System.out.println("loi cu phap o dong thu " + line);
+					endcode();// ket thuc cau lenh
+					return;
+				}
+				// if(ismath)
 			}
-		} catch (Exception e) {
+			while (!st.isempty())
+				q.push(st.pop());
+			System.out.println();
+			while (!q.isempty())
+
+			{
+				CheckL.cl(q.pop());
+			}
+		} catch (
+
+		Exception e) {
 			e.printStackTrace();
 		}
+	}
 
+	/**
+	 * lay do uu tien
+	 * 
+	 * @param a
+	 * @return
+	 */
+	static int getmod(int a) {
+		return (a / Klist.mod - 1);
+	}
+
+	/**
+	 * end of code
+	 * 
+	 * @throws IOException
+	 */
+	private static void endcode() throws IOException {
+		while (ch != '\n' && ch != ';' && ch != -1) // doc het dong lenh
+		{
+			ch = get();
+
+		}
 	}
 
 	/**
@@ -123,35 +182,42 @@ public class Read {
 		return false;
 	}
 
-	protected static String getword(InputStream in) throws IOException {
+	/**
+	 * lay ki tu trong ham da test
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	protected static String getword() throws IOException {
 		point = 0;
 		key[0] = ch;
+		point++;
 		ch = get();
 		while (ischar(ch)) {
-			point++;
 			key[point] = ch;
 			ch = get();
+			point++;
 		}
-		if (key[point] == ';')
-			point--;
+
+		// System.out.println(new String(key, 0, point));
 		return new String(key, 0, point);
 	}
 
 	protected static int kget() // lay bien in tu
 	{
 		try {
-			while (ch <= ' ') // loai cac ky tu thua
-			{
-				ch = get();
-			}
+			if (ch == -1)
+				return Klist.O_het;
 			if (ch == '"') {
 				String t;
-				t = getString(in);
+				t = getString();
 				que.push(t);
 				return Klist.J_text;
 			} else {
+				// System.out.println(ischar(ch));
 				if (ischar(ch)) {
-					String t = getword(in);
+
+					String t = getword();
 					int a = binarySearch(t);
 					if (a > -1)
 						return a;
@@ -166,6 +232,13 @@ public class Read {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return Klist.J_false;
+		}
+	}
+
+	static void next() throws IOException {
+		while (ch <= ' ') // loai cac ky tu thua
+		{
+			ch = get();
 		}
 	}
 
@@ -192,7 +265,7 @@ public class Read {
 		return -1;
 	}
 
-	static protected String getString(InputStream in) throws IOException {
+	static protected String getString() throws IOException {
 		StringBuilder st = new StringBuilder();
 		int d = ch;
 		st.append((char) ch);
@@ -238,8 +311,8 @@ public class Read {
 			return true;
 		if (a == '_')
 			return true;
-		a = a | 0x60;
-		return (a >= 'A' && a <= 'Z');
+		a = a | 0x20;
+		return (a >= 'a' && a <= 'z');
 	}
 
 	protected int find(String a) {
@@ -269,6 +342,18 @@ public class Read {
 	}
 
 	public static void main(String[] args) {
-		// init();
+		FileInputStream fin;
+		try {
+			fin = new FileInputStream("/home/amneiht/Desktop/test.js");
+			init(fin);
+			Ope.gettoken();
+			check_m();
+			fin.close();
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }

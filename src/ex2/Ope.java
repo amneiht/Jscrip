@@ -1,9 +1,11 @@
 package ex2;
 
 import extract.lib.*;
+import java.io.IOException;
 
 class Ope {
-	public static int gettoken() {
+	public static int gettoken() throws IOException {
+		Read.next();
 		try {
 			if (Read.ch == '.') {
 				Read.ch = Read.get();

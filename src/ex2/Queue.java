@@ -14,4 +14,8 @@ public class Queue<E> {
 			return null;
 		return st.removeFirst();
 	}
+	public boolean isempty()
+	{
+		return st.isEmpty();
+	}
 }
