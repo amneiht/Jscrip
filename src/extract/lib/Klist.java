@@ -1,8 +1,9 @@
 package extract.lib;
 public class Klist { 
+	public static final int J_m = -6 ;  // bien so 
 	public static final int J_text = -5 ;
 	public static final int J_false = -4 ;
-	public static final int J_m = -3 ;  // toan hang
+	public static final int J_v = -3 ;  // toan hang
 
 	public static final int J_String = 0 ;
 	public static final int J_boolean = 1 ;

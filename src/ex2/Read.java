@@ -175,10 +175,13 @@ public class Read {
 	private static boolean ismath(int a) {
 		// se con cap nhat
 
-		if (a == Klist.J_text)
-			return true;
-		if (a == Klist.J_m)
-			return true;
+//		if (a == Klist.J_text)
+//			return true;
+//		if (a == Klist.J_v)
+//			return true;
+//		if (a == Klist.J_m)
+//			return true;
+		if(a<0) return true;
 		return false;
 	}
 
@@ -193,13 +196,11 @@ public class Read {
 		key[0] = ch;
 		point++;
 		ch = get();
-		while (ischar(ch)) {
+		while (ischar(ch) || ch == '_') {
 			key[point] = ch;
 			ch = get();
 			point++;
 		}
-
-		// System.out.println(new String(key, 0, point));
 		return new String(key, 0, point);
 	}
 
@@ -214,8 +215,12 @@ public class Read {
 				que.push(t);
 				return Klist.J_text;
 			} else {
-				// System.out.println(ischar(ch));
-				if (ischar(ch)) {
+
+				if (isnumber(ch)) {
+					String t = getNumber(in);
+					que.push(t);
+					return Klist.J_m;
+				} else if (ischar(ch)) {
 
 					String t = getword();
 					int a = binarySearch(t);
@@ -223,7 +228,7 @@ public class Read {
 						return a;
 					else {
 						que.push(t);
-						return Klist.J_m;
+						return Klist.J_v; // variable tra ve gia tri bien
 					}
 				} else
 					return Klist.J_false; // bao loi
@@ -281,22 +286,18 @@ public class Read {
 		return ld;
 	}
 
-	static protected double getNumber(InputStream in) throws IOException // use when ch is number
+	static protected String getNumber(InputStream in) throws IOException // use when ch is number
 	{
-		StringBuilder st = new StringBuilder();
-		int d = ch;
-		st.append((char) ch);
-		while (ch != '"' && d != '/') {
-			d = ch;
-			st.append((char) ch);
+		point = 0;
+		key[0] = ch;
+		point++;
+		ch = get();
+		while (ischar(ch) || ch == '+' || ch == '-') {
+			key[point] = ch;
 			ch = get();
+			point++;
 		}
-		try {
-			double k = Double.parseDouble(st.toString());
-			return k;
-		} catch (Exception r) {
-			return Double.NaN;
-		}
+		return new String(key, 0, point);
 	}
 
 	public static int get() throws IOException {
@@ -306,10 +307,12 @@ public class Read {
 		return p;
 	}
 
+	public static boolean isnumber(int a) {
+		return a >= '0' && a <= '9';
+	}
+
 	public static boolean ischar(int a) {
 		if (a >= '0' && a <= '9')
-			return true;
-		if (a == '_')
 			return true;
 		a = a | 0x20;
 		return (a >= 'a' && a <= 'z');
@@ -349,7 +352,6 @@ public class Read {
 			Ope.gettoken();
 			check_m();
 			fin.close();
-
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

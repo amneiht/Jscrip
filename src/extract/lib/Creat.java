@@ -17,7 +17,7 @@ public class Creat {
 		String ds = new Creat().getClass().getPackage().getName();
 		str = "package " + ds + ";";
 		try {
-//			code();
+			code();
 //			get();
 //			cmp();
 			check();
@@ -33,8 +33,9 @@ public class Creat {
 		println("import extract.lib.Klist;");
 		println("class CheckL {");
 		println("public static void cl(int p) {");
+		println("if(p==Klist.J_v) {System.out.print(\"variable \"); \n return; }");
 		println("if(p==Klist.J_text) {System.out.print(\"text \"); \n return; }");
-		println("if(p==Klist.J_m) {System.out.print(\"m \"); \n return; }");
+		println("if(p==Klist.J_m) {System.out.print(\"math \"); \n return; }");
 		println("if(p==Klist.J_false) {System.out.print(\"false \"); \n return; }");
 		String s = new File("").getAbsolutePath() + "/code.txt";
 		List<String> h = Read.getText(s);
@@ -86,9 +87,10 @@ public class Creat {
 		print(str + "\n");
 		print("public class Klist { \n");
 		StringBuilder st = new StringBuilder("public static String[] list= {");
+		print("\tpublic static final int J_m = -6 ;  // bien so \n");
 		print("\tpublic static final int J_text = -5 ;\n");
 		print("\tpublic static final int J_false = -4 ;\n");
-		print("\tpublic static final int J_m = -3 ;  // toan hang\n");
+		print("\tpublic static final int J_v = -3 ;  // toan hang\n");
 		println();
 		for (String sd : h) {
 			// keyword.add(sd, i);
